@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+         layout:decorate="/manager/layout">
+<head>
+    <title> 관리자 </title>
+</head>
+
+<!-- 페이지의 개별적인 css -->
+<th:block layout:fragment="css">
+    <link rel="stylesheet" href="/css/index.css" />
+</th:block>
+
+<div layout:fragment="content">
+
+    <main role="main">
+        <div class="row">
+                <div class="movie-editor">
+                    <form method="post" action="/manager/addMovieReview">
+                        <h4 class="mb-12"> 영화 등록 </h4>
+                        <hr class="mb-4">
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="title"> 영화제목 </label>
+                                <input type="text" class="form-control"
+                                       id="title" name="title" placeholder="영화제목을 입력해 주세요." required>
+                                <div class="invalid-feedback">
+                                    내용이 비어있거나 올바르지 않습니다.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="year"> 개봉연도 </label>
+                                <input type="text" class="form-control"
+                                       id="year" name="year" placeholder="개봉연도을 입력해 주세요." required>
+                                <small class="text-muted"> </small>
+                                <div class="invalid-feedback">
+                                    내용이 비어있거나 올바르지 않습니다.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="type"> 타입 </label>
+                                <select class="custom-select d-block w-100" id="type" name="type" required>
+                                    <option value="">선택...</option>
+                                    <option th:each="type:${typeList}" th:value="${type}" th:text="${type}"> typeList </option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    타입을 선택해주세요.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="genre"> 장르 </label>
+                                <input type="text" class="form-control"
+                                       id="genre" name="genre" placeholder="장르을 입력해 주세요." required>
+                                <small class="text-muted"> </small>
+                                <div class="invalid-feedback">
+                                    내용이 비어있거나 올바르지 않습니다.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="poster"> 포스터 </label>
+                                <input type="text" class="form-control"
+                                       id="poster" name="poster" placeholder="포스터 이미지를 업로드해주세요" required>
+                                <small class="text-muted"> </small>
+                                <div class="invalid-feedback">
+                                    내용이 비어있거나 올바르지 않습니다.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="plot"> 영화내용 </label>
+                                <textarea type="text" class="form-control"
+                                          id="plot" name="plot" placeholder=""
+                                          required></textarea>
+                                <small class="text-muted"> 내용를 입력해 주세요  </small>
+                                <div class="invalid-feedback">
+                                    내용이 비어있거나 올바르지 않습니다.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="rated"> 등급 </label>
+                                <input type="text" class="form-control"
+                                       id="rated" name="rated" placeholder="등급을 입력해 주세요.">
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="released"> 상세개봉일 </label>
+                                <input type="text" class="form-control"
+                                       id="released" name="released" placeholder="상세개봉일를 입력해 주세요.">
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="runtime"> 런타임 </label>
+                                <input type="text" class="form-control"
+                                       id="runtime" name="runtime" placeholder="런타임을 입력해 주세요.">
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="director"> 디렉터 </label>
+                                <input type="text" class="form-control"
+                                       id="director" name="director" placeholder="디렉터을 입력해 주세요.">
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="writer"> 작가 </label>
+                                <input type="text" class="form-control"
+                                       id="writer" name="writer" placeholder="작가를 입력해 주세요.">
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="actors"> 배우 </label>
+                                <input type="text" class="form-control"
+                                       id="actors" name="actors" placeholder="배우를 입력해 주세요.">
+                            </div>
+                        </div>
+
+
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="language"> 언어 </label>
+                                <input type="text" class="form-control"
+                                       id="language" name="language" placeholder="언어를 입력해 주세요.">
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="country"> 출시국가 </label>
+                                <input type="text" class="form-control"
+                                       id="country" name="country" placeholder="출시국가 입력해 주세요.">
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="awards"> 어워드 </label>
+                                <input type="text" class="form-control"
+                                       id="awards" name="awards" placeholder="어워드를 입력해 주세요.">
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="metascore"> MetaScore </label>
+                                <input type="text" class="form-control"
+                                       id="metascore" name="metascore" placeholder="MetaScore 입력해 주세요.">
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="imdbRating"> imdbRating </label>
+                                <input type="text" class="form-control"
+                                       id="imdbRating" name="imdbRating" placeholder="imdbRating 입력해 주세요.">
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="imdbVotes"> imdbVotes </label>
+                                <input type="text" class="form-control"
+                                       id="imdbVotes" name="imdbVotes" placeholder="imdbVotes 입력해 주세요.">
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="DVD"> DVD 출시일 </label>
+                                <input type="text" class="form-control"
+                                       id="DVD" name="DVD" placeholder="DVD 출시일을 입력해 주세요.">
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="boxOffice"> boxOffice </label>
+                                <input type="text" class="form-control"
+                                       id="boxOffice" name="boxOffice" placeholder="boxOffice 입력해 주세요.">
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="production"> production </label>
+                                <input type="text" class="form-control"
+                                       id="production" name="production" placeholder="production 입력해 주세요.">
+                            </div>
+                        </div>
+
+                        <div class="row" >
+                            <div class="col-md-12 mb-12">
+                                <label for="website"> 홈페이지 </label>
+                                <input type="text" class="form-control"
+                                       id="website" name="website" placeholder="홈페이지를 입력해 주세요.">
+                            </div>
+                        </div>
+
+                        <hr class="mb-4">
+                        <div class="col-md-6 mb-6 mx-auto">
+                            <button class="btn btn-secondary btn btn-block" type="submit">
+                                등록하기
+                            </button>
+                        </div>
+                    </form>
+                </div>
+        </div>
+    </main>
+
+</div>
+
+</html>

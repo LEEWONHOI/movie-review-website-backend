@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+         layout:decorate="/manager/layout">
+<head>
+    <title> 관리자 </title>
+</head>
+
+<!-- 페이지의 개별적인 css -->
+<!--<th:block layout:fragment="css">-->
+<!--    <link rel="stylesheet" href="/css/index.css" />-->
+<!--</th:block>-->
+
+<div layout:fragment="content">
+    <main role="main">
+
+        <div class="title-bar">
+            <h4> 내 영화 리뷰 리스트 </h4>
+            <div class="buttons">
+                <button type="button" class="btn btn-sm btn-info" th:onclick="|location.href='@{/manager/addMovieReview}'|"> 등록 </button>
+            </div>
+        </div>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">영화제목</th>
+                <th scope="col">개봉일</th>
+                <th scope="col">장르</th>
+                <th scope="col"> 타입 </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="movie : ${movieList}" th:object="${movie}">
+                <td th:text="*{title}"> Frozen </td>
+                <td th:text="*{year}">1</td>
+                <td th:text="*{plot}">@mdo</td>
+                <td th:text="*{type}">@mdo</td>
+            </tr>
+            </tbody>
+        </table>
+
+
+    </main>
+</div>
+
+</html>
