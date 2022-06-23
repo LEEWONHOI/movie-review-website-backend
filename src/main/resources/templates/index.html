@@ -46,7 +46,7 @@
 
         <div th:if="${name != null}" th:each="authority : ${authorities}">
         <p class="lead font-weight-normal">어서오세요 <span th:text="${name}"></span> 님</p>
-            <a  th:if="${authority == MEMBER_AUTHORITY}" class="btn btn-outline-secondary" href="http://localhost:1234/#/">
+            <a  th:if="${authority == MEMBER_AUTHORITY}" class="btn btn-outline-secondary" href="/main">
                 영화 리뷰 페이지로 이동하기
             </a>
             <a  th:if="${authority == MANAGER_AUTHORITY}" class="btn btn-outline-secondary" href="/manager">

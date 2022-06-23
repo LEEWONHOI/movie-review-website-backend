@@ -1,5 +1,6 @@
 package hello.moivereview.config.login;
 
+import hello.moivereview.constant.FrontInfoConst;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
@@ -86,7 +87,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         // TODO 로그인된 사용자 정보에 맞춰서 주소값 리턴
         // TODO 멤버 main 화면 체크하기
         if (request.getParameter("site").equals("member")) {
-            return "http://localhost:1234/#/";
+            return "/main";
         } else if (request.getParameter("site").equals("manager")) {
             return "/manager";
         }

@@ -62,7 +62,7 @@ public class HomeController {
 
     private String estimateSite(String referer) {
         if (referer == null) {
-            return "http://127.0.0.1:1234/#/";
+            return "/";
         }
         try {
             URL url = new URL(referer);
