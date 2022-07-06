@@ -44,6 +44,8 @@ public class MovieDto {
 
     private List<hello.moivereview.web.controller.movie.dto.Ratings> Ratings;
 
+    private List<ReviewDto> reviews;
+
     private Long movieId;
 
     private Type Type;

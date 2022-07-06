@@ -71,7 +71,7 @@ public class MemberService {
         });
     }
 
-    public void updateMemberNAme(Long memberId, String memberName) {
+    public void updateMemberName(Long memberId, String memberName) {
         memberRepository.updateMemberName(memberId, memberName, LocalDateTime.now());
     }
 

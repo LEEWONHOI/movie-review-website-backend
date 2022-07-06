@@ -1,40 +1,54 @@
 package hello.moivereview.web.controller.member;
 
-import hello.moivereview.constant.FrontInfoConst;
+import com.google.gson.Gson;
+import hello.moivereview.config.SessionManager;
+import hello.moivereview.constant.UrlConst;
 import hello.moivereview.domain.Member;
+import hello.moivereview.web.controller.member.dto.MemberInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class MemberController {
 
-    @GetMapping("/main")
-    public void mainPage(@AuthenticationPrincipal Member member, HttpServletResponse response) {
+    private final SessionManager sessionManager;
 
-        // TODO Json data 로 유저 이름 보내주기 / 혹은 jwt 토큰 적용해보기
+    @GetMapping("/main")
+    public String mainPage(@AuthenticationPrincipal Member member, HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("member 페이지 접근");
+
+        sessionManager.createSession(member.getEmail(), response);
 
         try {
             response.setStatus(HttpServletResponse.SC_OK);
-            response.sendRedirect(FrontInfoConst.FrontURL);
+            response.sendRedirect("http://localhost:1234/#/");
         } catch (IOException e) {
             // 에러를 어디서 처리할지 고민해보기
             e.printStackTrace();
         }
+        return "index";
     }
 
-    @GetMapping("/about")
+    @GetMapping(value = UrlConst.FRONT_URL)
     public String myInfo(@AuthenticationPrincipal Member member) {
+        MemberInfoDto memberInfoDto = MemberInfoDto.builder()
+                .name(member.getName())
+                .email(member.getEmail())
+                .build();
 
-        return "";
+        System.out.println("about 페이지 접근");
+        System.out.println("memberInfoDto.getName() = " + memberInfoDto.getName());
+        System.out.println("memberInfoDto.getEmail() = " + memberInfoDto.getEmail());
 
+        return new Gson().toJson(memberInfoDto);
     }
 
 

@@ -79,7 +79,7 @@ public class Movie {
 
     // TODO 양방향 연결이 필요한지 프로젝트 진행하며 체크할것
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
-    private List<ReviewAndLike> reviewAndLikeList = new ArrayList<>();
+    private List<Review> reviewList = new ArrayList<>();
 
     public Movie(String title, String year, Type type, String poster, int selectedCount, String rated, String released, String runtime, String genre, String director, String writer, String actors, String plot, String language, String country, String awards, String metascore, String imdbRating, String imdbVotes, String DVD, String boxOffice, String production, String website, Boolean response) {
         this.title = title;

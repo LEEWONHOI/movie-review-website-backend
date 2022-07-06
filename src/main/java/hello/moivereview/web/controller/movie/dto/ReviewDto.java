@@ -1,4 +1,4 @@
-package hello.moivereview.web.controller.member.dto;
+package hello.moivereview.web.controller.movie.dto;
 
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -10,9 +10,9 @@ import lombok.Data;
 @NoArgsConstructor
 @Builder
 @Data
-public class MemberInfoDto {
+public class ReviewDto {
 
-    private String name;
-    private String email;
-
+    private Long id;
+    private String memberName;
+    private String contents;
 }

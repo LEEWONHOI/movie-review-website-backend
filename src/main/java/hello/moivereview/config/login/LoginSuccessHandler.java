@@ -1,6 +1,5 @@
 package hello.moivereview.config.login;
 
-import hello.moivereview.constant.FrontInfoConst;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;

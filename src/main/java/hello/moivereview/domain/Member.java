@@ -47,7 +47,7 @@ public class Member implements UserDetails {
 
     // TODO 양방향 연결이 필요한지 프로젝트 진행하며 체크할것
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<ReviewAndLike> reviewAndLikeList = new ArrayList<>();
+    private List<Review> reviewList = new ArrayList<>();
 
     private boolean enabled;
 
