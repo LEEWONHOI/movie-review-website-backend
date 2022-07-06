@@ -1,29 +1,25 @@
 package hello.moivereview.web.controller.movie.dto;
 
-import hello.moivereview.domain.Type;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.Objects;
 
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
-public class Search {
-
+public class MyReviewMovieDto {
     private String Title;
 
     private String Year;
 
     private Long movieId;
 
-    private Type Type;
+    private hello.moivereview.domain.Type Type;
 
     private String Poster;
 

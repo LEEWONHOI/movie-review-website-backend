@@ -32,7 +32,6 @@ public class ManagerController {
 
         long movieReviewCount = movieService.countMovieByMember(member.getId());
 
-        // TODO 작성한 영화 리뷰 목록 카운트 -> 완료
         model.addAttribute("movieReviewCount", movieReviewCount);
         // TODO 달린 댓글 리스트? 카운트
         model.addAttribute("userReviewCount", "0");

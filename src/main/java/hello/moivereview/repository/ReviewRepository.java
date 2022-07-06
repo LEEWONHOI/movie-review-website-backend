@@ -1,5 +1,6 @@
 package hello.moivereview.repository;
 
+import hello.moivereview.domain.Movie;
 import hello.moivereview.domain.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,5 +15,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query("select r from Review r where r.member.email =?1 and r.movie.id =?2")
     Optional<Review> findReviewByMemberEmail(String memberEmail, Long movieId);
+
+    @Query("select r.movie from Review r where r.member.email=?1")
+    Page<Movie> findMovieByMovie(String memberEmail, Pageable pageable);
 
 }

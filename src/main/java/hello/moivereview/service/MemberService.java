@@ -38,6 +38,10 @@ public class MemberService {
         return memberRepository.findAll(PageRequest.of(pageNum - 1, size));
     }
 
+    public Optional<Member> findMemberByEmail(String memberEmail) {
+        return memberRepository.findByEmail(memberEmail);
+    }
+
     public void addAuthority(Long memberId, String authority) {
         memberRepository.findById(memberId).ifPresent(member -> {
             Authority newRole = new Authority(member.getId(), authority);

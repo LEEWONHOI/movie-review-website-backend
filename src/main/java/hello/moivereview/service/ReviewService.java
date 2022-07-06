@@ -26,7 +26,7 @@ public class ReviewService {
 
     public Review save(String email, Long movieId, String comment) {
 
-        Member findMember = memberRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다"));
+        Member findMember = memberRepository.findMemberByEmail(email).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다"));
         Movie findMovie = movieRepository.findById(movieId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다"));
 
         Review review = new Review();
@@ -48,6 +48,7 @@ public class ReviewService {
     public Optional<Review> findReviewByMyEmail(String myEmail, Long movieId) {
         return reviewRepository.findReviewByMemberEmail(myEmail, movieId);
     }
+
 
 
 
