@@ -10,21 +10,20 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+// TODO 해당 방식은 비효율적이고 좋은 방식은 아니므로 추후에 jwt 토큰 방식으로 수정해야함을 알림
+
 @Component
 public class SessionManager {
+
 
     public static final String SESSION_COOKIE_NAME = "mySession";
     private Map<String, Object> sessionStore = new ConcurrentHashMap<>();
 
     public void createSession(Object value, HttpServletResponse response) {
         System.out.println("세션 생성 시작");
-        // 새션 생성 및 저장
         String sessionId = UUID.randomUUID().toString();
         sessionStore.put(sessionId, value);
-        System.out.println("sessionId = " + sessionId);
-        System.out.println("value = " + value.toString());
 
-        // 쿠키 생성
         Cookie cookie = new Cookie(SESSION_COOKIE_NAME, sessionId);
         response.addCookie(cookie);
     }
@@ -44,7 +43,6 @@ public class SessionManager {
     public void expire(HttpServletRequest request) {
         Cookie cookie = findCookie(request, SESSION_COOKIE_NAME);
         if (cookie != null) {
-            // TODO Logout 기능 시 초기화 작업
             sessionStore.remove(cookie.getValue());
         }
     }

@@ -79,7 +79,7 @@ class MovieServiceTest {
     @Test
     @DisplayName("movieId를 통해 하나의 영화의 세부 정보 가지고 오기")
     public void test2() {
-        Movie result = movieService.findByMovie(1L).get();
+        Movie result = movieService.findByMovie(1L);
         assertThat(result.getTitle()).isEqualTo("frozen");
     }
 
@@ -108,6 +108,12 @@ class MovieServiceTest {
         Page<Movie> foundMovieList = movieService.findAllByMovieListWithYear("frozen", null, null, 10);
         int result = foundMovieList.getSize();
         assertThat(result).isEqualTo(10);
+    }
+
+    @Test
+    @DisplayName("")
+    public void test_6() {
+
     }
 
 }

@@ -1,5 +1,6 @@
 package hello.moivereview.service;
 
+import hello.moivereview.annotation.Retry;
 import hello.moivereview.domain.Movie;
 import hello.moivereview.domain.Type;
 import hello.moivereview.repository.MovieRepository;
@@ -16,11 +17,12 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class MovieService {
 
     private final MovieRepository movieRepository;
 
+    @Transactional
     public Movie save(Movie movie) {
         if (movie.getId() == null) {
             movie.addCreateTime(LocalDateTime.now());
@@ -29,39 +31,36 @@ public class MovieService {
         return movieRepository.save(movie);
     }
 
-    public Optional<Movie> findByMovie(Long movieId) {
-        return movieRepository.findById(movieId);
+    @Retry
+    public Movie findByMovie(Long movieId) {
+        return movieRepository.findById(movieId).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 영화 id 입니다. = " + movieId));
     }
 
-    public Optional<Movie> findByTitle(String movieTitle) {
-        return movieRepository.findByTitle(movieTitle);
+    @Retry
+    public Movie findByTitle(String movieTitle) {
+        return movieRepository.findByTitle(movieTitle).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 영화 title 입니다. = " + movieTitle));
     }
 
+    @Retry
     public List<Movie> findAllByMemberId(Long memberId) {
         return movieRepository.findAllByMemberId(memberId);
     }
 
-    // TODO 검증 필요
     public Page<Movie> findAllByMemberId(Long memberId, Pageable pageable) {
         return movieRepository.findAllByMemberId(memberId, pageable);
     }
 
+    @Retry
     public long countMovieByMember(Long memberId) {
         return movieRepository.countMovieByMember(memberId);
     }
 
-    // TODO 삭제 예정 메서드
-    @Transactional(readOnly = true)
-    public List<Movie> findByMovieListTop10(String title) {
-        return movieRepository.findTop10ByTitleContainingIgnoreCase(title);
-    }
-
-    @Transactional(readOnly = true)
+    @Retry
     public Page<Movie> findAllByMovieListWithYear(String title, Type type, String year, int needNumber) {
         return movieRepository.findAllByTitleContainingIgnoreCaseAndTypeEqualsAndYearEquals(title, type, year, PageRequest.of(0, needNumber));
     }
 
-    @Transactional(readOnly = true)
+    @Retry
     public Page<Movie> findAllByMovieList(String title, Type type, int needNumber) {
         return movieRepository.findAllByTitleContainingIgnoreCaseAndTypeEquals(title, type, PageRequest.of(0, needNumber));
     }

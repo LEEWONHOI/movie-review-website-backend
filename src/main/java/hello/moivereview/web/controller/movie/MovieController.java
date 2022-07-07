@@ -37,45 +37,45 @@ public class MovieController {
             @RequestParam(required = false) String year,
             @RequestParam(required = true) int needPage
     ) {
-
         if (year.isEmpty()) {
             Page<Movie> movieList = movieService.findAllByMovieList(title, type, needPage);
             SearchMovieDto searchMovieDto = makeSearchMovieDto(movieList);
             return new Gson().toJson(searchMovieDto);
-
         } else {
             Page<Movie> movieList = movieService.findAllByMovieListWithYear(title, type, year, needPage);
             SearchMovieDto searchMovieDto = makeSearchMovieDto(movieList);
             return new Gson().toJson(searchMovieDto);
         }
-
     }
 
     @GetMapping("/movie/{movieId}")
     public String detailMovieInfo(@PathVariable Long movieId) {
-        Movie foundMovie = movieService.findByMovie(movieId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 영화입니다."));
-        List<Review> reviews = reviewService.findAllReviewByMovieId(movieId).toList();
-        List<ReviewDto> reviewDtoList = new ArrayList<>();
-
-        for (Review review : reviews) {
-            ReviewDto reviewDto = new ReviewDto();
-            reviewDto.setId(review.getId());
-            reviewDto.setMemberName(review.getMember().getName());
-            reviewDto.setContents(review.getContents());
-            reviewDtoList.add(reviewDto);
-        }
-
-        List<Ratings> ratingsList = initRating(foundMovie, reviews);
-        MovieDto movieDto = makeDetailMovieDto(foundMovie, ratingsList, reviewDtoList);
-
+        MovieDto movieDto = makeMovieDto(movieId);
         return new Gson().toJson(movieDto);
     }
 
     @PostMapping("/movie/addcomment")
     public String addComment(@RequestBody AddReviewDto addReviewDto, HttpServletResponse response, HttpServletRequest request) throws IOException {
-        System.out.println("comment 로직 접근");
         Long movieId = addReviewDto.getId();
-        Movie foundMovie = movieService.findByMovie(movieId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 영화입니다."));
+        MovieDto movieDto = makeMovieDto(movieId);
+
+        String sessionId = addReviewDto.getSession();
+        log.info("sessionId = {}", sessionId);
+
+        if (sessionId == null) {
+            log.info("세션 만료된 사용자");
+            response.sendRedirect(UrlConst.BACKEND_URL);
+            return "redirect:" + UrlConst.BACKEND_URL;
+        }
+
+        String memberEmail = (String) sessionManager.findBySession(sessionId);
+        reviewService.save(memberEmail, movieId, addReviewDto.getComment());
+
+        return new Gson().toJson(movieDto);
+    }
+
+    private MovieDto makeMovieDto(Long movieId) {
+        Movie foundMovie = movieService.findByMovie(movieId);
         List<Review> reviews = reviewService.findAllReviewByMovieId(movieId).toList();
         List<ReviewDto> reviewDtoList = new ArrayList<>();
 
@@ -88,28 +88,11 @@ public class MovieController {
         }
 
 
-        List<Ratings> ratingsList = initRating(foundMovie, reviews);
-        MovieDto movieDto = makeDetailMovieDto(foundMovie, ratingsList, reviewDtoList);
-
-        String sessionId = addReviewDto.getSession();
-        System.out.println("sessionId = " + sessionId);
-
-        if (sessionId == null) {
-            // TODO 로그인이 필요합니다. 메시지
-            System.out.println("세션 만료된 사용자");
-            response.sendRedirect(UrlConst.BACKEND_URL);
-            return "redirect:" + UrlConst.BACKEND_URL;
-        }
-
-        String memberEmail = (String) sessionManager.findBySession(sessionId);
-
-        Review review = reviewService.save(memberEmail, movieId, addReviewDto.getComment());
-        System.out.println("review = " + review.getContents());
-
-        return new Gson().toJson(movieDto);
+        List<Ratings> ratingsList = initRating(foundMovie);
+        return makeDetailMovieDto(foundMovie, ratingsList, reviewDtoList);
     }
 
-    private List<Ratings> initRating(Movie findMovie, List<Review> reviews) {
+    private List<Ratings> initRating(Movie findMovie) {
         Ratings metascore = new Ratings("Internet Movie Database", findMovie.getMetascore());
         Ratings imdbRating = new Ratings("Rotten Tomatoes", findMovie.getImdbRating());
         Ratings imdbVotes = new Ratings("Metacritic", findMovie.getImdbVotes());
@@ -119,17 +102,10 @@ public class MovieController {
     }
 
     private List<Ratings> makeRatingList(Ratings... ratings) {
-        List<Ratings> ratingsList = new ArrayList<>();
-        Arrays.stream(ratings).forEach(ratingsList::add);
-        return ratingsList;
+        return new ArrayList<>(Arrays.asList(ratings));
     }
 
     public MovieDto makeDetailMovieDto(Movie movie, List<Ratings> ratingsList, List<ReviewDto> reviews) {
-
-        for (ReviewDto review : reviews) {
-            System.out.println("review dto = " + review.getContents());
-        }
-
         return new MovieDto(
                 movie.getTitle(),
                 movie.getYear(),

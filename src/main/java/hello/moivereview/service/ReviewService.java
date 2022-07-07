@@ -1,5 +1,6 @@
 package hello.moivereview.service;
 
+import hello.moivereview.annotation.Retry;
 import hello.moivereview.domain.Member;
 import hello.moivereview.domain.Movie;
 import hello.moivereview.domain.Review;
@@ -17,13 +18,14 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
     private final MovieRepository movieRepository;
 
+    @Transactional
     public Review save(String email, Long movieId, String comment) {
 
         Member findMember = memberRepository.findMemberByEmail(email).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다"));
@@ -41,10 +43,12 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
+    @Retry
     public Page<Review> findAllReviewByMovieId(Long movieId) {
        return reviewRepository.findAllByMovie_Id(movieId, Pageable.unpaged());
     }
 
+    @Retry
     public Optional<Review> findReviewByMyEmail(String myEmail, Long movieId) {
         return reviewRepository.findReviewByMemberEmail(myEmail, movieId);
     }

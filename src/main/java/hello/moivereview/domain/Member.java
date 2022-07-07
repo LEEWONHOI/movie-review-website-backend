@@ -28,7 +28,8 @@ public class Member implements UserDetails {
 
     private String password;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)  // TODO EAGER 변경할것
+    // authorities 정보는 첫 접근시부터 필요하고, 많은량이 아니므로 eager 설정
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(foreignKey = @ForeignKey(name = "member_id"))
     private Set<Authority> authorities;
 

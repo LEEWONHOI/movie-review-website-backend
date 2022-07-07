@@ -1,4 +1,4 @@
-package hello.moivereview.web.dto;
+package hello.moivereview.web.controller.member.dto;
 
 import lombok.Getter;
 import lombok.Setter;

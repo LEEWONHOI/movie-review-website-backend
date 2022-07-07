@@ -7,6 +7,7 @@ import hello.moivereview.service.MemberService;
 import hello.moivereview.service.MovieService;
 import hello.moivereview.web.controller.manager.dto.AddMovieDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,14 +27,13 @@ public class ManagerController {
     private final MemberService memberService;
     private final MovieService movieService;
 
-    // TODO GetMapping 으로 변경?
     @RequestMapping({"", "/"})
     public String index(@AuthenticationPrincipal Member member, Model model) {
 
         long movieReviewCount = movieService.countMovieByMember(member.getId());
 
         model.addAttribute("movieReviewCount", movieReviewCount);
-        // TODO 달린 댓글 리스트? 카운트
+        // TODO 달린 댓글 리스트 카운트
         model.addAttribute("userReviewCount", "0");
 
         return "manager/index";
@@ -64,7 +64,6 @@ public class ManagerController {
     @PostMapping("/addMovieReview")
     public String addMovieReviewPost(@AuthenticationPrincipal Member member, @ModelAttribute AddMovieDto addMovieDto) {
 
-        // Dto 를 Movie로 변경
         Movie movie = Movie.builder()
                 .title(addMovieDto.getTitle())
                 .year(addMovieDto.getYear())
@@ -90,10 +89,8 @@ public class ManagerController {
                 .website(addMovieDto.getWebsite())
                 .build();
 
-        // movie 작성자 항목도 추가
         movie.registerMember(member);
 
-        // 받아온 데이터를 DB에 저장
         movieService.save(movie);
 
         return "redirect:/manager";

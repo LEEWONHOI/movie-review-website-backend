@@ -36,7 +36,7 @@ public class AboutController {
         }
 
         String memberEmail = (String) sessionManager.findBySession(sessionId);
-        Member findMember = memberService.findMemberByEmail(memberEmail).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다"));
+        Member findMember = memberService.findMemberByEmail(memberEmail);
         List<Search> myReviewMovieDtoList = new ArrayList<>();
 
         HashMap<String, Review> hashMap = new HashMap<>();

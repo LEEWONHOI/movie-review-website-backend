@@ -1,5 +1,6 @@
 package hello.moivereview.service;
 
+import hello.moivereview.annotation.Retry;
 import hello.moivereview.domain.Authority;
 import hello.moivereview.domain.Member;
 import hello.moivereview.repository.MemberRepository;
@@ -15,13 +16,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
 
     private final MemberRepository memberRepository;
 
-
+    @Transactional
     public Member save(Member member) {
         if (member.getId() == null) {
             member.addCreateTime(LocalDateTime.now());
@@ -30,16 +31,19 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public Optional<Member> findMember(Long memberId) {
-        return memberRepository.findById(memberId);
+    @Retry
+    public Member findMember(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원 id 입니다. " + memberId));
     }
 
+    @Retry
     public Page<Member> memberList(int pageNum, int size) {
         return memberRepository.findAll(PageRequest.of(pageNum - 1, size));
     }
 
-    public Optional<Member> findMemberByEmail(String memberEmail) {
-        return memberRepository.findByEmail(memberEmail);
+    @Retry
+    public Member findMemberByEmail(String memberEmail) {
+        return memberRepository.findByEmail(memberEmail).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원 id 입니다. " + memberEmail));
     }
 
     public void addAuthority(Long memberId, String authority) {

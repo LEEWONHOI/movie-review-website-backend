@@ -23,7 +23,6 @@ public class MemberSignupController {
 
     @GetMapping("/signup/member")
     public String signupGet(Model model) {
-        // TODO 이건 왜 전달하는지 참고..
         model.addAttribute("site", "member");
         model.addAttribute("genderList", Gender.values());
         model.addAttribute("cityList", City.values());

@@ -30,7 +30,7 @@ public class MovieLoginFilter extends UsernamePasswordAuthenticationFilter {
         this.setRememberMeServices(rememberMeServices);
     }
 
-    // TODO 에러처리를 무시하는 어노테이션. 다시 체크할것
+    // 에러처리를 무시하는 어노테이션
     @SneakyThrows
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -42,7 +42,6 @@ public class MovieLoginFilter extends UsernamePasswordAuthenticationFilter {
                 .build();
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                // TODO 권한을 null로 초기화? 나중에 주입되는 포인트 찾기 스프링 시큐리티가 허가증을 찍어주나?
                 userLogin.getUsername(), userLogin.getPassword(), null
         );
         return authenticationManager.authenticate(authToken);
@@ -67,7 +66,7 @@ public class MovieLoginFilter extends UsernamePasswordAuthenticationFilter {
         super.unsuccessfulAuthentication(request, response, failed);
     }
 
-    // TODO 사용 포인트 체크하기
+    // ip 가져와서 체크 후 헤더 주입. 좀 어려운 부분
     public static String getIp(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {

@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 rememberMeServices()
         );
         http
-                .csrf().disable()   // TODO 왜?
+                .csrf().disable()
                 .formLogin(login -> {
                     login.loginPage("/login");
                 })

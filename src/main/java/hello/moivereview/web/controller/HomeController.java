@@ -94,7 +94,7 @@ public class HomeController {
         return "redirect:/" + site + "/signup";
     }
 
-    // TODO 프론트쪽에서 할지 체크
+    // TODO 디자인 변경
     @GetMapping("/access-denied")
     public String accessDenied() {
         return "/accessDenied";
